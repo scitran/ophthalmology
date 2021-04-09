@@ -18,10 +18,12 @@ thisProject = st.lookup('scitran/VBR-CF');
 
 %{
 
-% This code does not run on ga, only on demo, sigh.
 fwga = scitran('ga');
 
-thisProject = fwga.lookup('flywheel/Ophthalmology');
+% The group is different here and on demo3.  It runs with
+flywheel/Ophthalmology, but sessions is not returned.   Weird IMHO.
+
+thisProject = fwga.lookup('ophthalmology/Ophthalmology');
 sessions = thisProject.sessions();
 stPrint(s,'subject','label');
 
