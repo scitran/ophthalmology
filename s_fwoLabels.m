@@ -18,21 +18,27 @@ thisProject = st.lookup('scitran/VBR-CF');
 
 %{
 
-fwga = scitran('ga');
+st = scitran('ga');
 
 % The group is different here and on demo3.  It runs with
-flywheel/Ophthalmology, but sessions is not returned.   Weird IMHO.
+% flywheel/Ophthalmology, but sessions is not returned.   Weird IMHO.
 
-thisProject = fwga.lookup('ophthalmology/Ophthalmology');
+thisProject = st.lookupfull('ophthalmology/Ophthalmology');
+
+thisProject = st.lookup('ophthalmology/Ophthalmology');
+thisProject = st.fw.get(thisProject.id);
+
 sessions = thisProject.sessions();
 stPrint(s,'subject','label');
 
 %}
-fwdemo = scitran('demo');
+%{
+st = scitran('demo');
 
-thisProject = fwdemo.lookup('flywheel/Ophthalmology');
+thisProject = st.lookup('flywheel/Ophthalmology');
 sessions = thisProject.sessions();
 stPrint(s,'subject','label');
+%}
 
 %% Read and display the current project labels
 
@@ -62,7 +68,7 @@ allLabels = {'Internal LM', ...   % 1
     'RPE', ...                    % 15
     'Choriocapillaris', ...
     'Choroid sclera junction', ...
-    'Intergitation zone',...
+    'Interdigitation zone',...
     'Fovea'};                     % 19
 
 allValues = {'ILM', ...
@@ -109,6 +115,6 @@ for ii=1:numel(allLabels)
 end
 
 %% Update the info struct on the site
-project.update('info',info);
+thisProject.update('info',info);
 
 %%
