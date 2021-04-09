@@ -1,16 +1,40 @@
 %% s_fwoLabels
+%
+% Next:  Move the labels to a json file
+% Write code to read the json file and set the labels on the FW site
+%
+% Brian
 
+%{
 %% FW OPHTHALMOLOGY
+% Have not yet tested on stanfordlabs
 
 % Open up the connection to the site
 st      = scitran('stanfordlabs');
 
 % Lookup the project
-project = st.lookup('scitran/VBR-CF');
+thisProject = st.lookup('scitran/VBR-CF');
+%}
+
+%{
+
+% This code does not run on ga, only on demo, sigh.
+fwga = scitran('ga');
+
+thisProject = fwga.lookup('flywheel/Ophthalmology');
+sessions = thisProject.sessions();
+stPrint(s,'subject','label');
+
+%}
+fwdemo = scitran('demo');
+
+thisProject = fwdemo.lookup('flywheel/Ophthalmology');
+sessions = thisProject.sessions();
+stPrint(s,'subject','label');
 
 %% Read and display the current project labels
 
-pLabels = project.info.labels;
+pLabels = thisProject.info.labels;
 
 for ii=1:numel(pLabels.commonLabels)
   disp(pLabels.commonLabels(ii).label)
