@@ -1,46 +1,30 @@
 %% s_fwoLabels
 %
-% Next:  Move the labels to a json file
-% Write code to read the json file and set the labels on the FW site
+% Write a json file to set the labels
+% Then upload the JSON file (if a modern OHIF) or set the Custom Information (if
+% the legacy).
 %
-% Brian
 
 %{
-%% FW OPHTHALMOLOGY
 % Have not yet tested on stanfordlabs
-
 % Open up the connection to the site
 st      = scitran('stanfordlabs');
-
-% Lookup the project
 thisProject = st.lookup('scitran/VBR-CF');
 %}
-
 %{
-
-st = scitran('ga');
-
 % The group is different here and on demo3.  It runs with
-% flywheel/Ophthalmology, but sessions is not returned.   Weird IMHO.
-
-thisProject = st.lookupfull('ophthalmology/Ophthalmology');
-
-thisProject = st.lookup('ophthalmology/Ophthalmology');
-thisProject = st.fw.get(thisProject.id);
-
-sessions = thisProject.sessions();
-stPrint(s,'subject','label');
-
+% flywheel/Ophthalmology. 
+st = scitran('ga');
+full = true;
+thisProject = st.lookup('ophthalmology/Ophthalmology',full);
+stPrint(thisProject.files,'name')
 %}
 %{
 st = scitran('demo');
-
 thisProject = st.lookup('flywheel/Ophthalmology');
-sessions = thisProject.sessions();
-stPrint(s,'subject','label');
 %}
 
-%% Read and display the current project labels
+%% If a legacy viewer, we can read and display the current project labels
 
 pLabels = thisProject.info.labels;
 
@@ -49,72 +33,26 @@ for ii=1:numel(pLabels.commonLabels)
   disp(pLabels.commonLabels(ii).value)
 end
 
-%%  Create or update the labels
+%% If a modern viewer, we should be able to download the ohif_config.json
 
-allLabels = {'Internal LM', ...   % 1
-    'Posterior vitreous' ...
-    'Preretinal space',...        % 3
-    'Nerve fiber layer',...       % 4
-    'Ganglion cell layer', ...
-    'Inner plexiform layer', ...  % 6
-    'Inner nuclear layer', ...
-    'Outer plexiform layer', ...
-    'Henle fiber layer',...       % 9
-    'Outer nuclear layer', ...
-    'Outer segments', ...
-    'External LM', ...            % 12
-    'Myoid zone', ...
-    'Ellipsoid Zone', ...
-    'RPE', ...                    % 15
-    'Choriocapillaris', ...
-    'Choroid sclera junction', ...
-    'Interdigitation zone',...
-    'Fovea'};                     % 19
+destination = fullfile(ophRootPath,'local','ohif_config.json');
+thisProject.downloadFile('ohif_config.json',destination)
+edit(destination);
 
-allValues = {'ILM', ...
-    'PCV' ...
-    'PRS',...
-    'NFL',...
-    'GCL', ...
-    'IPL', ...
-    'INL', ...
-    'OPL', ...
-    'HFL',...
-    'ONL', ...
-    'OS', ...
-    'ELM', ...
-    'MZ', ...
-    'EZ', ...
-    'RPE', ...
-    'CC', ...
-    'CSH', ...
-    'IZ', ...
-    'FOV'};
+%% If a modern viewer, upload an attachment named ohif_config.json
+fname = ophCreateLabels('fundus');
+configFile = fullfile(ophRootPath,'local','ohif_config.json');
+copyfile(fname,configFile);
+thisProject.uploadFile(configFile);
 
-% Check that I didn't screw up
-assert(numel(allValues) == numel(allLabels))
+%% Now switch over to the OCT
+fname = ophCreateLabels('OCT');
+configFile = fullfile(ophRootPath,'local','ohif_config.json');
+copyfile(fname,configFile);
+thisProject.uploadFile(configFile);
 
-% Select a subset of the labels to be the common labels
-lst = [1, 4, 5, 6, 7, 8, 9 10, 11, 12, 15, 19];
-commonLabels = cell(numel(lst),1);
-commonValues = cell(numel(lst),1);
-for ii=1:numel(lst)
-    commonLabels{ii} = allLabels{lst(ii)};
-    commonValues{ii} = allValues{lst(ii)};
-end
-
-%% Create the info struct for the project
-for ii=1:numel(commonLabels)
-    info.labels.commonLabels(ii).label = commonLabels{ii};
-    info.labels.commonLabels(ii).value = commonValues{ii};
-end
-
-for ii=1:numel(allLabels)
-    info.labels.labels(ii).label = allLabels{ii};
-    info.labels.labels(ii).value = allValues{ii};
-end
-
-%% Update the info struct on the site
+%% If a legacy viewer, update the info struct on the site
 thisProject.update('info',info);
-
+%% If a legacy viewer, update the info struct on the site
+thisProject.update('info',info);
 %%
