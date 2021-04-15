@@ -40,13 +40,19 @@ thisProject.downloadFile('ohif_config.json',destination)
 edit(destination);
 
 %% If a modern viewer, upload an attachment named ohif_config.json
+
+% This is the fundus case
 fname = ophCreateLabels('fundus');
+thisProject.uploadFile(configFile);
+
 configFile = fullfile(ophRootPath,'local','ohif_config.json');
 copyfile(fname,configFile);
 thisProject.uploadFile(configFile);
 
 %% Now switch over to the OCT
 fname = ophCreateLabels('OCT');
+thisProject.uploadFile(configFile);
+
 configFile = fullfile(ophRootPath,'local','ohif_config.json');
 copyfile(fname,configFile);
 thisProject.uploadFile(configFile);
