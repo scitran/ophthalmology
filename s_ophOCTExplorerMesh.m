@@ -60,7 +60,7 @@ M = trimesh(T,P(:,1),P(:,2),newQ(:));
 mrvNewGraphWin;
 thickness = P(:,3) - newQ(:);
 MThick = trimesh(T,P(:,1),P(:,2),thickness);
-
+title('Distance between layers')
 %% Surf version.  Also looks good.
 mrvNewGraphWin;
 
