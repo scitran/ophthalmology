@@ -1,5 +1,18 @@
 %% Load up the segmented layers into mask
+%
+% I think that we processed some OCT data using OCTExplorer to produce
+% these outputs.
+%
+% In this script we are creating a mesh to display one or two different
+% layers.
+%
+% T/B
+%
+% See also
+%
 
+%% These files are already on the GA site
+%
 load('P73304206_Macular Cube 512x128_8-19-2020_13-28-54_OS_sn211046_cube_raw_Surfaces_Retina-JEI-Final','mask');
 mask = double(mask);
 
@@ -35,6 +48,23 @@ T = delaunay(P(:,1),P(:,2));
 M = trimesh(T,P(:,1),P(:,2),P(:,3));
 M.FaceColor = 'white'; M.EdgeColor = 'black';
 
+%% Can we make an OBJ file from the P and T??
+%
+% Apparently yes.
+% We can visualize the obj output file using MeshLab.
+%
+mn = mean(M.Vertices);
+FV.vertices = M.Vertices - mn;
+FV.faces    = M.Faces;
+N = [];  % We don't know about the normals
+
+OBJ = objFVN(FV,N);
+fname = fullfile(vistaRootPath,'local',sprintf('OCT-%d.obj',thisLayer));
+OBJ = rmfield(OBJ,'material');
+objWrite(OBJ,fname);
+
+%%
+
 %% Suppose we compare to the 3rd layer?
 
 thisLayer = 2;
@@ -55,6 +85,12 @@ M = trimesh(T,P(:,1),P(:,2),P(:,3));
 M.FaceColor = 'white'; M.EdgeColor = 'black';
 hold on;
 M = trimesh(T,P(:,1),P(:,2),newQ(:));
+
+%% Can we make an OBJ file from the P and T??
+FV.vertices = M.Vertices;
+FV.faces    = M.Faces;
+N = [];
+OBJ = objFVN(FV,N);
 
 %% Thickness
 mrvNewGraphWin;
