@@ -56,14 +56,18 @@ M.FaceColor = 'white'; M.EdgeColor = 'black';
 mn = mean(M.Vertices);
 FV.vertices = M.Vertices - mn;
 FV.faces    = M.Faces;
+% FV = smoothpatch(FV);
 N = [];  % We don't know about the normals
+
+%% Convert to an obj output file
+%  We uploaded from here to the GA site
 
 OBJ = objFVN(FV,N);
 fname = fullfile(vistaRootPath,'local',sprintf('OCT-%d.obj',thisLayer));
+
+% We are ignoring the material properties
 OBJ = rmfield(OBJ,'material');
 objWrite(OBJ,fname);
-
-%%
 
 %% Suppose we compare to the 3rd layer?
 
