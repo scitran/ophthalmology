@@ -33,7 +33,7 @@ function fname = ophCreateLabels(dtype,varargin)
 %}
 
 %% Parse
-varargin = ieParamFormat(varargin);
+varargin = mrvParamFormat(varargin);
 
 p = inputParser;
 p.addRequired('dtype',@ischar);
@@ -43,7 +43,8 @@ p.parse(dtype,varargin{:});
 viewer = p.Results.viewer;
 
 %% OCT Labels
-octLabels = {'Internal LM', ...   % 1
+octLabels = {'No label',...
+    'Internal LM', ...   % 1
     'Posterior vitreous' ...
     'Preretinal space',...        % 3
     'Nerve fiber layer',...       % 4
@@ -63,7 +64,8 @@ octLabels = {'Internal LM', ...   % 1
     'Interdigitation zone',...
     'Fovea'};                     % 19
 
-octValues = {'ILM', ...
+octValues = {'N/A',...
+    'ILM', ...
     'PCV' ...
     'PRS',...
     'NFL',...
@@ -83,7 +85,7 @@ octValues = {'ILM', ...
     'IZ', ...
     'FOV'};
 
-commonOCT = [ 1 4 6 12 15 19];
+commonOCT = [1 2 4 6 12 15 19];
 
 assert(numel(octValues) == numel(octLabels))
 
@@ -107,7 +109,7 @@ assert(numel(fundusValues) == numel(fundusLabels))
 
 %% Set up the parameters
 
-switch ieParamFormat(dtype)
+switch mrvParamFormat(dtype)
     case 'oct'
         fname = 'ohif_config_oct.json';      
         allLabels = octLabels;

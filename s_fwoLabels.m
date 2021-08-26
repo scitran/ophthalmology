@@ -23,15 +23,22 @@ stPrint(thisProject.files,'name')
 st = scitran('demo');
 thisProject = st.lookup('flywheel/Ophthalmology');
 %}
-
+%{
+st = scitran('ga');
+full = true;
+thisProject = st.lookup('ophthalmology/OCT Vendor Test Data',full);
+stPrint(thisProject.files,'name')
+%}
 %% If a legacy viewer, we can read and display the current project labels
 
+%{
 pLabels = thisProject.info.labels;
 
 for ii=1:numel(pLabels.commonLabels)
   disp(pLabels.commonLabels(ii).label)
   disp(pLabels.commonLabels(ii).value)
 end
+%}
 
 %% If a modern viewer, we should be able to download the ohif_config.json
 
@@ -51,9 +58,10 @@ thisProject.uploadFile(configFile);
 
 %% Now switch over to the OCT
 fname = ophCreateLabels('OCT');
-thisProject.uploadFile(configFile);
 
 configFile = fullfile(ophRootPath,'local','ohif_config.json');
+thisProject.uploadFile(configFile);
+
 copyfile(fname,configFile);
 thisProject.uploadFile(configFile);
 
