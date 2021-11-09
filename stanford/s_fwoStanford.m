@@ -24,7 +24,7 @@ oct = py.numpy.load('ODD-246 OD_aligned.npy');
 octData = double(oct);
 
 %%  Plot them in an overlay
-
+nSlices = size(ilm_layers,1);
 mrvNewGraphWin;
 for ii=1:nSlices
     imagesc(squeeze(octData(ii,:,:))); title(sprintf('%d',ii));
