@@ -107,6 +107,24 @@ commonFundus = [1 4 5];
 
 assert(numel(fundusValues) == numel(fundusLabels))
 
+%% Cortex labels
+
+cortexLabels = {'White', ...   
+    'Gray' ...
+    'V1',...          
+    'V2',...       
+    'Calcarine'};               
+
+cortexValues = {'W', ...
+    'G' ...
+    'V1',...
+    'V2',...
+    'Calc'}; 
+
+commonCortex = [1 2 3 4 5];
+
+assert(numel(cortexValues) == numel(cortexLabels))
+
 %% Set up the parameters
 
 switch mrvParamFormat(dtype)
@@ -120,6 +138,11 @@ switch mrvParamFormat(dtype)
         allLabels = fundusLabels;
         allValues = fundusValues;
         lst = commonFundus;
+    case 'cortex'
+        fname = 'ohif_config_cortex.json';
+        allLabels = cortexLabels;
+        allValues = cortexValues;
+        lst = commonCortex;
     otherwise
         error('Unknown data type %s\n',dtype);
 end

@@ -1,15 +1,27 @@
 %% s_fwoLabels
 %
-% Write a json file to set the labels
-% Then upload the JSON file (if a modern OHIF) or set the Custom Information (if
-% the legacy).
+% Works for the modern viewer.  Deleting previous code for legacy
+% viewer.
+%
+% Write a json file to establish labels.
+%
+% Then upload the JSON file to the project.
+%
+% Thinking about uploading multiple types and then changing only the
+% one used (ohif_config.json).
+%
 %
 
 %{
-% Have not yet tested on stanfordlabs
 % Open up the connection to the site
 st      = scitran('stanfordlabs');
-thisProject = st.lookup('scitran/VBR-CF');
+thisProject = st.lookup('adni/ADNI: T1');
+%}
+%{
+thisProject = st.lookup('wandell/Ophthalmology dev');
+%}
+%{
+thisProject = st.lookup('liaolab/OCT Segmentation ODD');
 %}
 %{
 % The group is different here and on demo3.  It runs with
@@ -40,6 +52,13 @@ for ii=1:numel(pLabels.commonLabels)
 end
 %}
 
+%% Create the different labels
+fname = ophCreateLabels('cortex');
+thisProject.uploadFile(fname);
+copyfile(fname,'ohif_config.json');
+thisProject.uploadFile('ohif_config.json');
+
+
 %% If a modern viewer, we should be able to download the ohif_config.json
 
 destination = fullfile(ophRootPath,'local','ohif_config.json');
@@ -50,7 +69,7 @@ edit(destination);
 
 % This is the fundus case
 fname = ophCreateLabels('fundus');
-thisProject.uploadFile(configFile);
+thisProject.uploadFile(fname);
 
 configFile = fullfile(ophRootPath,'local','ohif_config.json');
 copyfile(fname,configFile);
