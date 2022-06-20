@@ -14,8 +14,9 @@
 
 %{
 % Open up the connection to the site
-st      = scitran('stanfordlabs');
-thisProject = st.lookup('adni/ADNI: T1');
+   st      = scitran('stanfordlabs');
+   thisProject = st.lookup('adni/ADNI: T1');
+   
 %}
 %{
 thisProject = st.lookup('wandell/Ophthalmology dev');
