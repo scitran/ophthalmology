@@ -15,6 +15,7 @@ project = st.lookup('scitran/VBR-CF');
 %% Find one of the acquisitions for a subject
 
 subjects        = project.subjects();
+
 thisSubject     = stSelect(subjects,'label','patient_02','nocell',true);
 thisSession     = thisSubject.sessions.findFirst();
 thisAcquisition = thisSession.acquisitions.findOne('label=OCT');
