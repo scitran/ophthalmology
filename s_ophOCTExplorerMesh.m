@@ -6,7 +6,7 @@
 % In this script we are creating a mesh to display one or two different
 % layers.
 %
-% T/B
+% Teresa and Brian
 %
 % See also
 %
